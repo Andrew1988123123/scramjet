@@ -1,20 +1,31 @@
 pipeline {
-    agent any
-
-    stages {
-            stage('Clone repository') {
-                git credentialsId: 'git', url: 'https://github.com/Andrew1988123123/scramjet'
-            }
-
-            stage('Build image') {
-               dockerImage = docker.build("Andrew1988123123/my-react-app:latest")
-            }
-
-            stage('Push image') {
-                withDockerRegistry([ credentialsId: "login.docker.com", url: "" ]) {
-                dockerImage.push()
-                }
-            }
-        }
+  agent any
+  options {
+    buildDiscarder(logRotator(numToKeepStr: '5'))
+  }
+  environment {
+    DOCKERHUB_CREDENTIALS = credentials('74734589924')
+  }
+  stages {
+    stage('Build') {
+      steps {
+        sh 'docker build -t 74734589924/my-react-app:latest .'
+      }
     }
-
+    stage('Login') {
+      steps {
+        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+      }
+    }
+    stage('Push') {
+      steps {
+        sh 'docker push 74734589924/my-react-app:latest'
+      }
+    }
+  }
+  post {
+    always {
+      sh 'docker logout'
+    }
+  }
+}
