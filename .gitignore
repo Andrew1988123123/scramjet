@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/jenkins-data
 /.pnp
 .pnp.js
 

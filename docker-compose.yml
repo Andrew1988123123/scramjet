@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  react:
+    build: .
+    container_name: react-app
+    ports:
+      - "3000:80"
+    volumes:
+      - ./src:/app/src
+
+  jenkins:
+    image: jenkins/jenkins:lts
+#    build: .
+    container_name: jenkins-server
+    privileged: true
+    hostname: jenkinsserver
+    user: root
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - ./jenkins-data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
