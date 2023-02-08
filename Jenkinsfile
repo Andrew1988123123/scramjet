@@ -1,31 +1,35 @@
 pipeline {
-  agent any
-  options {
-    buildDiscarder(logRotator(numToKeepStr: '5'))
-  }
-  environment {
+    agent any
+    options {
+        skipStagesAfterUnstable()
+    }
+    environment {
     DOCKERHUB_CREDENTIALS = credentials('74734589924')
   }
-  stages {
-    stage('Build') {
-      steps {
-        sh 'docker build -t 74734589924/my-react-app:latest .'
-      }
+    stages {
+
+        stage('Build') {
+            steps {
+                script{
+                 app = docker.build("74734589924/my-react-app")
+                }
+            }
+        }
+        stage('Test'){
+            steps {
+                 echo 'Empty'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script{
+                    docker.withRegistry('https://registry.hub.docker.com', '74734589924') {
+                    app.push("${env.BUILD_NUMBER}")
+                    app.push("latest")
+                    }
+                }
+            }
+        }
     }
-    stage('Login') {
-      steps {
-        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-      }
-    }
-    stage('Push') {
-      steps {
-        sh 'docker push 74734589924/my-react-app:latest'
-      }
-    }
-  }
-  post {
-    always {
-      sh 'docker logout'
-    }
-  }
 }
