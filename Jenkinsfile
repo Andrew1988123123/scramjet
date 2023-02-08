@@ -25,7 +25,7 @@ pipeline {
             steps {
                 script{
                     docker.withRegistry('https://registry.hub.docker.com', '74734589924') {
-                    app.push("${env.BUILD_NUMBER}")
+                    app.push("${env.GIT_COMMIT}")
                     app.push("latest")
                     }
                 }
