@@ -11,7 +11,7 @@ pipeline {
         stage('Build') {
             steps {
                 script{
-                 app = docker.build("74734589924/":"${env.JOB_NAME}")
+                 app = docker.build("74734589924/${env.JOB_NAME}")
                 }
             }
         }
