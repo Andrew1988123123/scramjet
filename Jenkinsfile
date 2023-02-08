@@ -11,7 +11,7 @@ pipeline {
             }
 
             stage('Push image') {
-                withDockerRegistry([ credentialsId: "123456", url: "" ]) {
+                withDockerRegistry([ credentialsId: "login.docker.com", url: "" ]) {
                 dockerImage.push()
                 }
             }
