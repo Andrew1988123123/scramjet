@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'docker build -t 74734589924/my-react-app:${env.BUILD_ID} .'
+        sh 'docker build -t 74734589924/my-react-app:latest .'
       }
     }
     stage('Login') {
@@ -19,7 +19,7 @@ pipeline {
     }
     stage('Push') {
       steps {
-        sh 'docker push 74734589924/my-react-app:${env.BUILD_ID}'
+        sh 'docker push 74734589924/my-react-app:latest'
       }
     }
   }
