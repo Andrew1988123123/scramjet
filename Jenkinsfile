@@ -1,4 +1,4 @@
-node {
+any {
     stage('Clone repository') {
         git credentialsId: 'git', url: 'https://github.com/Andrew1988123123/scramjet'
     }
